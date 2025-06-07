@@ -54,3 +54,6 @@ CREATE TABLE chat (
   FOREIGN KEY (studentID) REFERENCES student(studentID)
     ON DELETE CASCADE
 );
+
+-- Add sender_type column to the existing chat table
+ALTER TABLE chat ADD COLUMN sender_type ENUM('student', 'officer') NOT NULL DEFAULT 'student';

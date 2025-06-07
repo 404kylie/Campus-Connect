@@ -60,7 +60,7 @@ $current_user = get_user_info();
 
       <main class="content">
         <section id="overview" class="section active">
-          <!-- USER INFO
+          <!-- USER INFO, NOT DISPLAYED IN THIS VERSION, INFO IS IN MANAGE-ACCOUNT
         <div class="user-info">
             <h3>Welcome back, <?php echo htmlspecialchars($current_user['name']); ?>!</h3>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($current_user['email']); ?></p>
