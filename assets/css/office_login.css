@@ -1,0 +1,134 @@
+html, body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.1) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 3rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(253, 160, 133, 0.3);
+      width: 400px;
+      max-width: 90vw;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #f76c2f;
+    }
+
+    form input,
+    form button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1.5px solid #fdae6b;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    form input:focus {
+      border-color: #f76c2f;
+      outline: none;
+      box-shadow: 0 0 10px 2px rgba(247, 108, 47, 0.6);
+      transition: box-shadow 0.4s ease, border-color 0.3s ease;
+    }
+
+    form button {
+      background: linear-gradient(90deg, #f76c2f, #fdae6b);
+      border: none;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    form button:hover {
+      background: linear-gradient(90deg, #fdae6b, #f76c2f);
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.5);
+      transform: scale(1.05);
+    }
+
+    .logo-wrapper {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      background-color: #fff;
+      padding: 8px 14px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo-brand:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(247, 108, 47, 0.4);
+    }
+
+    .logo-img {
+      height: 48px;
+      margin-right: 10px;
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f76c2f;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .logo-brand:hover .logo-text {
+      color: #fd934a;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .back-link a {
+      color: #f76c2f;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Error message style */
+    .error-msg {
+      color: #d93025;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-align: center;
+      background-color: #fce8e6;
+      padding: 0.7rem;
+      border-radius: 6px;
+      border: 1px solid #d93025;
+    }
