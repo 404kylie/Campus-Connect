@@ -26,7 +26,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
-          <th>Student ID</th>
+          <th>Status</th>
           <th>Department</th>
           <th>Actions</th>
         </tr>
@@ -36,25 +36,26 @@
             <form method="POST" onsubmit="return confirm('Are you sure?');">
               <td data-label="ID">1235656</td>
 
-              <td data-label="Name">
-                <input type="text" name="name" value="" required />
-              </td>
+              <td data-label="Name">Kyle Esdrelon</td>
 
-              <td data-label="Email">
-                <input type="email" name="email" value="" required />
-              </td>
+              <td data-label="Email">wow@wow.wow</td>
 
               <td data-label="Role">
                 <select name="role" required>
-                  <option value="admin">>Admin</option>
-                  <option value="user">>Office</option>
-                  <option value="student">>Student</option>
+                  <option value="officer">Officer</option>
+                  <option value="student">Student</option>
                   <!-- Add more roles as needed -->
                 </select>
               </td>
 
-              <td data-label="Student ID">
-                <input type="text" name="student_id" value="" />
+              <td data-label="Status">
+                  <select name="staus" required>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="Representative">Representative</option>
+                  <!-- representative disappears if role is student -->
+                  <!-- Add more roles as needed -->
+                </select>
               </td>
 
               <td data-label="Department">

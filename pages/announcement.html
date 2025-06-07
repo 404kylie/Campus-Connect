@@ -6,7 +6,6 @@
     <title>CampusConnect Portal</title>
     <link rel="stylesheet" href="/assets/css/announcement.css" />
   </head>
-
   <body>
     <header>
       <div class="logo-title">
@@ -23,7 +22,7 @@
       <aside class="sidebar">
         <ul>
           <li><a href="student_dashboard.html">🏠 Project Overview</a></li>
-          <li><a href="announcement.html">📢 Announcements</a></li>
+          <li class="active"><a href="announcement.html">📢 Announcements</a></li>
           <li><a href="chat.html">💬 Chat Support</a></li>
           <li><a href="manage-account.html">👤 My Account</a></li>
           <li><a href="/index.html">🚪 Logout</a></li>
@@ -33,58 +32,158 @@
       <main class="content">
         <section class="section" id="announcements">
           <h1>📢 Latest Announcements</h1>
-
-          <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-          <form method="POST" class="admin-form">
-            <textarea
-              name="new_announcement"
-              rows="3"
-              placeholder="Write a new announcement..."
-            ></textarea>
-            <button type="submit">Add Announcement</button>
-          </form>
-          <?php endif; ?>
-
           <div id="announcement-list">
-            <!-- Fetched dynamically by JS -->
+            <!-- Sample announcements showing the template structure -->
+            
+            <div class="announcement-item">
+              <div class="announcement-header">
+                <h3 class="announcement-title">
+                  System Maintenance Schedule
+                </h3>
+                <div class="announcement-datetime">
+                  <p class="announcement-date">June 07, 2025</p>
+                  <p class="announcement-time">10:30 AM</p>
+                </div>
+              </div>
+              <p class="announcement-author">
+                Posted by: <span class="announcement-department">Kyle Esdrelon | BSIT</span>
+              </p>
+              <p class="announcement-content">
+                Dear students, please be informed that the CampusConnect portal will undergo scheduled maintenance on June 8, 2025, from 2:00 AM to 6:00 AM. During this time, the system will be temporarily unavailable. We apologize for any inconvenience caused.
+              </p>
+            </div>
+
+            <div class="announcement-item">
+              <div class="announcement-header">
+                <h3 class="announcement-title">Mid-term Examination Guidelines</h3>
+                <div class="announcement-datetime">
+                  <p class="announcement-date">June 06, 2025</p>
+                  <p class="announcement-time">2:15 PM</p>
+                </div>
+              </div>
+              <p class="announcement-author">
+                Posted by: <span class="announcement-department">Maria Santos | Registrar</span>
+              </p>
+              <p class="announcement-content">
+                All students are reminded that mid-term examinations will begin on June 15, 2025. Please ensure you have reviewed the examination schedule and prepared all necessary materials. Late submissions will not be accepted without prior approval.
+              </p>
+            </div>
+
+            <div class="announcement-item">
+              <div class="announcement-header">
+                <h3 class="announcement-title">Library Extended Hours</h3>
+                <div class="announcement-datetime">
+                  <p class="announcement-date">June 05, 2025</p>
+                  <p class="announcement-time">9:45 AM</p>
+                </div>
+              </div>
+              <p class="announcement-author">
+                Posted by: <span class="announcement-department">John Rivera | Library Services</span>
+              </p>
+              <p class="announcement-content">
+                Great news! The campus library will now be open until 10:00 PM on weekdays to accommodate students' study needs during examination period. Additional study rooms have also been made available for group discussions.
+              </p>
+            </div>
+
+            <div class="announcement-item">
+              <div class="announcement-header">
+                <h3 class="announcement-title">Student Organization Registration</h3>
+                <div class="announcement-datetime">
+                  <p class="announcement-date">June 04, 2025</p>
+                  <p class="announcement-time">11:20 AM</p>
+                </div>
+              </div>
+              <p class="announcement-author">
+                Posted by: <span class="announcement-department">Ana Reyes | Student Affairs</span>
+              </p>
+              <p class="announcement-content">
+                Registration for new student organizations is now open! Submit your application forms to the Student Affairs Office by June 20, 2025. All requirements and guidelines are available on the portal's document section.
+              </p>
+            </div>
+
+            <!-- Template for when no announcements exist -->
+            <!-- 
+            <div class="no-announcements">
+              <p>No announcements available at this time.</p>
+            </div>
+            -->
+
           </div>
         </section>
       </main>
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        fetch("get_announcements.php")
-          .then((response) => response.json())
-          .then((data) => {
-            const list = document.getElementById("announcement-list");
-            list.innerHTML = "";
+      // JavaScript template for dynamic announcement loading
+      // This will be used when integrating with backend
+      
+      /*
+      Sample data structure that matches your updated ERD:
+      const announcements = [
+        {
+          officerID: 1,
+          officerName: "Kyle Esdrelon",
+          department: "BSIT",
+          date: "2025-06-07",
+          time: "10:30:00",
+          subject: "System Maintenance Schedule",
+          content: "Dear students, please be informed that...",
+          priority: "urgent" // optional field for styling
+        }
+      ];
 
-            if (data.length === 0) {
-              list.innerHTML = "<p>No announcements at the moment.</p>";
-              return;
-            }
+      function loadAnnouncements(announcements) {
+        const container = document.getElementById('announcement-list');
+        
+        if (announcements.length === 0) {
+          container.innerHTML = '<div class="no-announcements"><p>No announcements available at this time.</p></div>';
+          return;
+        }
 
-            data.forEach((item) => {
-              const container = document.createElement("div");
-              container.classList.add("announcement-item");
-
-              const date = new Date(item.created_at);
-              const formattedDate = date.toLocaleString();
-
-              container.innerHTML = `
-              <div class="announcement-title">📢 Announcement</div>
-              <div class="announcement-date">${formattedDate}</div>
-              <div class="announcement-description">${item.content}</div>
-            `;
-
-              list.appendChild(container);
-            });
-          })
-          .catch((error) => {
-            console.error("Error loading announcements:", error);
+        const announcementHTML = announcements.map(announcement => {
+          const date = new Date(announcement.date);
+          const formattedDate = date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
           });
-      });
+          
+          const time = new Date(`2000-01-01T${announcement.time}`);
+          const formattedTime = time.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+          });
+
+          const priorityBadge = announcement.priority === 'urgent' ? 
+            '<span class="announcement-badge">URGENT</span>' : '';
+
+          return `
+            <div class="announcement-item">
+              <div class="announcement-header">
+                <h3 class="announcement-title">
+                  ${announcement.subject}
+                  ${priorityBadge}
+                </h3>
+                <div class="announcement-datetime">
+                  <p class="announcement-date">${formattedDate}</p>
+                  <p class="announcement-time">${formattedTime}</p>
+                </div>
+              </div>
+              <p class="announcement-author">
+                Posted by: <span class="announcement-department">${announcement.officerName} | ${announcement.department}</span>
+              </p>
+              <p class="announcement-content">${announcement.content}</p>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = announcementHTML;
+      }
+
+      // Example usage:
+      // loadAnnouncements(fetchedAnnouncementsFromBackend);
+      */
     </script>
   </body>
 </html>
