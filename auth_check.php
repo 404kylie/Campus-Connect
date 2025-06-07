@@ -34,7 +34,7 @@ function check_auth($required_role = null) {
 }
 
 // Function to get current user info
-function get_current_user() {
+function get_user_info() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }

@@ -1,5 +1,14 @@
+ADD INTO EVERY PAGE TO MAKE SURE USERS CANT GO INTO NON VERIFIED PAGES
+
 <?php
 require_once '../auth_check.php';
 check_auth('student'); // or 'office' or 'admin'
 $current_user = get_current_user();
-?>
+?> 
+
+
+CREATE ADMIN
+
+-- Insert a default admin (password is 'admin123')
+INSERT INTO admin (name, password) VALUES 
+('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
