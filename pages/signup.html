@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/signup.css">
+</head>
+<body>
+    <!-- Logo at top-left -->
+  <div class="logo-wrapper">
+    <a href="#" class="logo-brand">
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/032/414/564/original/3d-rendering-of-speech-bubble-3d-pastel-chat-with-question-mark-icon-set-png.png"
+        alt="Logo" class="logo-img" />
+      <span class="logo-text">Campus Connect</span>
+    </a>
+  </div>
+  <div class="container">
+    <div class="form-box">
+      <form id="auth-form" method="post" action="login_process.php">
+        <h2 id="form-title">Sign Up</h2>
+        
+
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="text" name="name" placeholder="Full Name" id="name-field" class="hidden" />
+        <select name="role" id="role">
+            <option value="Student">Student</option>
+            <option value="Office">Office</option>
+        </select>
+        <input type="text" name="student_id" placeholder="Student ID" id="student-id-field" /> 
+        <!-- Change into Office ID or Admin ID user is one -->
+        <select name="department" id="department-field">
+            <option value="CS">Computer Science</option>
+            <option value="IT">Information Technology</option> 
+            <option value="ECE">Electronics and Communication</option>
+            <option value="ME">Mechanical Engineering</option>
+            <option value="CE">Civil Engineering</option>
+            <option value="EE">Electrical Engineering</option>
+            <option value="Other">Other</option>
+            <!-- Add more departments as needed -->
+        </select>
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="password" name="password" placeholder="Confirm Password" required />
+        <button id="continue-btn" type="submit">Continue</button>
+        <p>
+          <span id="toggle-text">Already have an account?</span>
+          <a href="/index.html">Log in</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div id="lottie-loading"></div>
+  </div>
+</body>
+</html>
