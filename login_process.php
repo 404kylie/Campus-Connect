@@ -18,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Password is required";
     }
     
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    // For admin, we don't need email validation since they use username
+    if ($user_type !== 'admin' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format";
     }
     
@@ -54,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $user = $result->fetch_assoc();
                     if (password_verify($password, $user['password'])) {
                         // Set session variables
-                        $_SESSION['user_type'] = 'student';
+                        $_SESSION['user_type'] = 'student';  // Keep as 'student'
                         $_SESSION['user_id'] = $user['studentID'];
                         $_SESSION['user_email'] = $user['email'];
                         $_SESSION['user_name'] = $user['name'];
@@ -77,8 +78,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($result->num_rows === 1) {
                     $user = $result->fetch_assoc();
                     if (password_verify($password, $user['password'])) {
-                        // Set session variables
-                        $_SESSION['user_type'] = 'office';
+                        // Set session variables - CHANGED: use 'officer' instead of 'office'
+                        $_SESSION['user_type'] = 'officer';  // Changed from 'office' to 'officer'
                         $_SESSION['user_id'] = $user['officerID'];
                         $_SESSION['user_email'] = $user['email'];
                         $_SESSION['user_name'] = $user['name'];
@@ -92,10 +93,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
                 
             case 'admin':
-                // Check admin credentials
+                // Check admin credentials - FIXED: Now properly handles admin login
+                // Admin login uses the name field as username (not email)
+                $username = $email; // The form field is called 'email' but contains username for admin
                 $sql = "SELECT adminID, name, password FROM admin WHERE name = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $email); // Using email field for admin name/email
+                $stmt->bind_param("s", $username);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 
@@ -106,6 +109,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['user_type'] = 'admin';
                         $_SESSION['user_id'] = $user['adminID'];
                         $_SESSION['user_name'] = $user['name'];
+                        $_SESSION['user_email'] = ''; // Admins don't have email in your schema
+                        $_SESSION['user_department'] = ''; // Admins don't have department
                         
                         header("Location: pages/admin_dashboard.php");
                         exit();
@@ -115,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         // If we reach here, login failed
-        $_SESSION['login_errors'] = ["Invalid email or password"];
+        $_SESSION['login_errors'] = ["Invalid credentials"];
         $_SESSION['login_email'] = $email;
         
         // Redirect back to appropriate login page
