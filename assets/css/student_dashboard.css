@@ -1,0 +1,145 @@
+.sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      padding: 10px 15px;
+    }
+/* General and layout */
+html, body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #f6d365, #fda085);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0,
+    rgba(255, 255, 255, 0.1) 10px, transparent 10px, transparent 20px);
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(253, 160, 133, 0.3);
+  display: flex;
+  align-items: center;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  margin-right: 10px;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.logo:hover {
+  transform: scale(1.1);
+}
+
+.app-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f76c2f;
+}
+
+/* Dashboard layout */
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+
+.sidebar {
+  background: white;
+  width: 240px;
+  padding: 1rem;
+  box-shadow: 2px 0 10px rgba(253, 160, 133, 0.2);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  color: #f76c2f;
+  user-select: none;
+}
+
+.sidebar li:hover,
+.sidebar li.active {
+  background-color: #fdae6b;
+  color: white;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 10px 15px;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hide inactive sections */
+.section.hidden {
+  display: none;
+}
+
+/* Project overview styling */
+.project-overview {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-radius: 12px;
+  box-shadow:
+    0 6px 20px rgba(253, 160, 133, 0.6),
+    0 0 15px 3px rgba(247, 108, 47, 0.7);
+  width: 500px;
+  max-width: 90vw;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #333;
+  border: 3px solid #f76c2f;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.project-overview:hover {
+  box-shadow:
+    0 8px 25px rgba(253, 160, 133, 0.8),
+    0 0 25px 6px rgba(247, 108, 47, 0.9);
+  border-color: #fdae6b;
+}
+
+.project-overview h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #f76c2f;
+  font-weight: 700;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
