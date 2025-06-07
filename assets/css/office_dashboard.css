@@ -1,0 +1,147 @@
+body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .dashboard-container {
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    h1,
+    h2 {
+      text-align: center;
+      color: #f76c2f;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      resize: none;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    button.save-btn {
+      background: linear-gradient(90deg, #f76c2f, #fdae6b);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button.save-btn:hover {
+      background: linear-gradient(90deg, #fdae6b, #f76c2f);
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.5);
+      transform: scale(1.05);
+    }
+
+    .announcement-box {
+      background: #fff0e6;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .announcement-box textarea {
+      flex-grow: 1;
+      min-height: 80px;
+    }
+
+    .announcement-date {
+      font-size: 0.85rem;
+      color: #555;
+      width: 100%;
+      margin-top: 0.3rem;
+      font-style: italic;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      height: fit-content;
+      transition: background 0.3s ease;
+      align-self: center;
+    }
+
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+
+    .edit-form {
+      flex-grow: 1;
+    }
+
+    .message {
+      color: green;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    /* Added styles for buttons container */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    button.logout-btn,
+    a.chat-btn-link {
+      background: linear-gradient(90deg, #f76c2f, #fdae6b);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      min-width: 120px;
+      flex: 1 1 150px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button.logout-btn:hover,
+    a.chat-btn-link:hover {
+      background: linear-gradient(90deg, #fdae6b, #f76c2f);
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.5);
+      transform: scale(1.05);
+      text-decoration: none;
+      color: white;
+    }
