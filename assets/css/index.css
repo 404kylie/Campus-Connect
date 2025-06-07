@@ -1,0 +1,280 @@
+    html,
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      background-image:
+        repeating-linear-gradient(45deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.1) 10px,
+          transparent 10px,
+          transparent 20px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 3rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(253, 160, 133, 0.3);
+      width: 400px;
+      max-width: 90vw;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #f76c2f;
+    }
+
+    form input,
+    form select,
+    form button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1.5px solid #fdae6b;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    form input:focus,
+    form select:focus {
+      border-color: #f76c2f;
+      outline: none;
+      box-shadow: 0 0 10px 2px rgba(247, 108, 47, 0.6);
+      transition: box-shadow 0.4s ease, border-color 0.3s ease;
+    }
+
+    form button {
+      background: linear-gradient(90deg, #f76c2f, #fdae6b);
+      border: none;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    form button:hover {
+      background: linear-gradient(90deg, #fdae6b, #f76c2f);
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.5);
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    p {
+      text-align: center;
+      color: #444;
+      font-size: 0.9rem;
+    }
+
+    p a {
+      cursor: pointer;
+      color: #f76c2f;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    p a:hover {
+      color: #fdae6b;
+      text-decoration: underline;
+    }
+
+    #loading-overlay {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 9999;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: opacity 0.3s ease;
+    }
+
+    #loading-overlay.show {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #lottie-loading {
+      width: 250px !important;
+      height: 250px !important;
+    }
+
+    .logo-wrapper {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      background-color: #fff;
+      padding: 8px 14px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(247, 108, 47, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo-brand:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(247, 108, 47, 0.4);
+    }
+
+    .logo-img {
+      height: 48px;
+      margin-right: 10px;
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f76c2f;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .logo-brand:hover .logo-text {
+      color: #fd934a;
+    }
+
+    /* Admin & Office login buttons container */
+    .login-buttons {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      z-index: 1100;
+    }
+
+    /* Admin & Office login buttons */
+    .login-btn {
+      background: linear-gradient(90deg, #f76c2f, #fdae6b);
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(247, 108, 47, 0.3);
+      transition: transform 0.3s ease, background 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(90deg, #fdae6b, #f76c2f);
+      transform: scale(1.05);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        padding: 2rem 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      form input,
+      form select,
+      form button {
+        font-size: 0.95rem;
+        padding: 0.55rem;
+      }
+
+      .logo-img {
+        height: 38px;
+      }
+
+      .logo-text {
+        font-size: 1rem;
+      }
+
+      .login-buttons {
+        flex-direction: column;
+        top: 80px;
+        right: 20px;
+      }
+
+      .login-btn {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-wrapper {
+        top: 10px;
+        left: 10px;
+      }
+
+      .logo-brand {
+        padding: 6px 10px;
+      }
+
+      .logo-img {
+        height: 30px;
+        margin-right: 6px;
+      }
+
+      .logo-text {
+        font-size: 0.9rem;
+      }
+
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      form input,
+      form select,
+      form button {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+      }
+
+      .login-buttons {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        gap: 8px;
+      }
+    }
