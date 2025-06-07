@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="/assets/css/manage-account.css" />
+    <style>
+      .sidebar ul li a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        padding: 10px 15px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="logo-title">
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/032/414/564/original/3d-rendering-of-speech-bubble-3d-pastel-chat-with-question-mark-icon-set-png.png"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="app-title">CampusConnect</span>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <ul>
+          <li><a href="student_dashboard.php">🏠 Project Overview</a></li>
+          <li><a href="announcement.php">📢 Announcements</a></li>
+          <li><a href="chat.php">💬 Chat Support</a></li>
+          <li><a href="manage-account.php" class="active">👤 My Account</a></li>
+          <li><a href="logout.php">🚪 Logout</a></li>
+        </ul>
+      </aside>
+
+      <main class="content">
+        <div class="container">
+          <h2>Profile</h2>
+          <form id="profile-form" method="POST" action="manage-account.php">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Full Name"
+              required
+              readonly
+              value="<?php echo htmlspecialchars($name); ?>"
+            />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              required
+              readonly
+              value="<?php echo htmlspecialchars($email); ?>"
+            />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="New Password (leave blank to keep current)"
+              readonly
+            />
+            <input
+              type="text"
+              id="department"
+              name="department"
+              placeholder="Department"
+              required
+              readonly
+              value="<?php echo htmlspecialchars($department); ?>"
+            />
+
+            <button type="button" id="edit-save-btn">Edit Profile</button>
+          </form>
+          <p id="message"><?php echo htmlspecialchars($message); ?></p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
