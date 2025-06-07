@@ -67,7 +67,7 @@ unset($_SESSION['signup_errors']);
                 
                 <p>
                     <span id="toggle-text">Already have an account?</span>
-                    <a href="../index.html">Log in</a>
+                    <a href="../index.php">Log in</a>
                 </p>
             </form>
         </div>

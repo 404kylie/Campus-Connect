@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if ($stmt->execute()) {
             $_SESSION['signup_success'] = "Account created successfully! You can now log in.";
-            header("Location: ../index.html");
+            header("Location: ../index.php");
             exit();
         } else {
             throw new Exception("Failed to create account");
