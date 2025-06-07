@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/admin_dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+    <h1>Welcome, Kyle!</h1>
+    <p>You are logged in as admin.</p>
+    <form action="/index.html" method="POST" style="margin-top: 2rem;">
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+  </div>
+
+  <div class="dashboard-container">
+    <h2>User Management</h2>
+
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Student ID</th>
+          <th>Department</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <form method="POST" onsubmit="return confirm('Are you sure?');">
+              <td data-label="ID">1235656</td>
+
+              <td data-label="Name">
+                <input type="text" name="name" value="" required />
+              </td>
+
+              <td data-label="Email">
+                <input type="email" name="email" value="" required />
+              </td>
+
+              <td data-label="Role">
+                <select name="role" required>
+                  <option value="admin">>Admin</option>
+                  <option value="user">>Office</option>
+                  <option value="student">>Student</option>
+                  <!-- Add more roles as needed -->
+                </select>
+              </td>
+
+              <td data-label="Student ID">
+                <input type="text" name="student_id" value="" />
+              </td>
+
+              <td data-label="Department">
+                <input type="text" name="department" value="" />
+              </td>
+
+              <td data-label="Actions">
+                <input type="hidden" name="id" value="" />
+                <button type="submit" name="edit_user" class="action-btn">Save</button>
+                <button type="submit" name="delete_user" class="action-btn"
+                  onclick="">Delete</button>
+              </td>
+            </form>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
