@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat Support - CampusConnect</title>
+    <link rel="stylesheet" href="/assets/css/chat.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo-title">
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/032/414/564/original/3d-rendering-of-speech-bubble-3d-pastel-chat-with-question-mark-icon-set-png.png"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="app-title">CampusConnect</span>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <ul>
+          <li><a href="student_dashboard.html">🏠 Project Overview</a></li>
+          <li><a href="announcement.html">📢 Announcements</a></li>
+          <li><a href="chat.html" class="active">💬 Chat Support</a></li>
+          <li><a href="manage-account.html">👤 My Account</a></li>
+          <li><a href="logout.html">🚪 Logout</a></li>
+        </ul>
+      </aside>
+
+      <main class="content">
+        <section id="chat" class="section">
+          <div class="chat-window">
+            <div id="messages" class="messages"></div>
+            <form id="chat-form" class="chat-form">
+              <input
+                id="chat-input"
+                type="text"
+                placeholder="Type your message..."
+                autocomplete="off"
+                required
+              />
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
