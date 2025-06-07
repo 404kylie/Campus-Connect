@@ -31,8 +31,37 @@
 
       <main class="content">
         <section id="chat" class="section">
+          <!-- Department Representative Info Card -->
+          <div class="rep-info-card">
+            <h3>Your Department Representative</h3>
+            <div class="rep-details">
+              <div class="rep-item">
+                <span class="rep-label">Name:</span>
+                <span class="rep-value" id="rep-name">Kyle Anderson</span>
+                <!-- Backend: Replace with dynamic data from database -->
+              </div>
+              <div class="rep-item">
+                <span class="rep-label">Email:</span>
+                <span class="rep-value" id="rep-email">kyle.anderson@campus.edu</span>
+                <!-- Backend: Replace with dynamic data from database -->
+              </div>
+              <div class="rep-item">
+                <span class="rep-label">Department:</span>
+                <span class="rep-value" id="rep-department">Computer Science</span>
+                <!-- Backend: Replace with dynamic data from database -->
+              </div>
+            </div>
+          </div>
+
           <div class="chat-window">
-            <div id="messages" class="messages"></div>
+            <div class="chat-header">
+              <span class="chat-title">Chat with Your Department Rep</span>
+              <span class="online-status">● Online</span>
+              <!-- Backend: Update online status based on rep availability -->
+            </div>
+            <div id="messages" class="messages">
+              <!-- Backend: Load previous messages from database here -->
+            </div>
             <form id="chat-form" class="chat-form">
               <input
                 id="chat-input"
@@ -42,10 +71,47 @@
                 required
               />
               <button type="submit">Send</button>
+              <!-- Backend: Handle form submission to save message and send to rep -->
             </form>
           </div>
         </section>
       </main>
     </div>
+
+    <script>
+      // Frontend JavaScript for real-time chat functionality
+      // Backend: Integrate with WebSocket or polling for real-time updates
+      document.getElementById('chat-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        
+        if (message) {
+          // Add message to chat (temporary - replace with backend call)
+          addMessage(message, 'me');
+          input.value = '';
+          
+          // Backend TODO: 
+          // 1. Send message to database
+          // 2. Notify department representative
+          // 3. Update chat history
+        }
+      });
+
+      function addMessage(text, sender) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        messageDiv.innerHTML = `
+          <span class="text">${text}</span>
+          <span class="time">${time}</span>
+        `;
+        
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    </script>
   </body>
 </html>

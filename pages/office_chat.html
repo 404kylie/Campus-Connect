@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Hub - CampusConnect</title>
+    <link rel="stylesheet" href="/assets/css/office_chat.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header-section">
+            <h1>Chat Support Hub</h1>
+            <div class="header-buttons">
+                <a href="office_dashboard.html" class="back-btn">← Back to Dashboard</a>
+                <button class="refresh-btn" onclick="refreshChats()">🔄 Refresh</button>
+                <!-- Backend: Add refresh functionality to load new messages -->
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-hub-container">
+        <!-- Left Sidebar - Student Chat List -->
+        <div class="chat-list-sidebar">
+            <div class="sidebar-header">
+                <h3>Student Conversations</h3>
+                <span class="chat-count" id="chat-count">3 active chats</span>
+                <!-- Backend: Update count dynamically -->
+            </div>
+            
+            <div class="chat-list" id="chat-list">
+                <!-- Backend: Generate this list dynamically from database -->
+                <div class="chat-item active" data-student-id="1" onclick="selectChat(1)">
+                    <div class="student-avatar">JS</div>
+                    <div class="chat-preview">
+                        <div class="student-name">John Smith</div>
+                        <div class="student-info">Computer Science • john.smith@student.edu</div>
+                        <div class="last-message">Hi, I need help with my project submission...</div>
+                        <div class="message-time">2 minutes ago</div>
+                        <div class="unread-indicator">2</div>
+                    </div>
+                </div>
+
+                <div class="chat-item" data-student-id="2" onclick="selectChat(2)">
+                    <div class="student-avatar">MB</div>
+                    <div class="chat-preview">
+                        <div class="student-name">Maria Brown</div>
+                        <div class="student-info">Computer Science • maria.brown@student.edu</div>
+                        <div class="last-message">Thank you for your help yesterday!</div>
+                        <div class="message-time">1 hour ago</div>
+                    </div>
+                </div>
+
+                <div class="chat-item" data-student-id="3" onclick="selectChat(3)">
+                    <div class="student-avatar">DW</div>
+                    <div class="chat-preview">
+                        <div class="student-name">David Wilson</div>
+                        <div class="student-info">Computer Science • david.wilson@student.edu</div>
+                        <div class="last-message">Can we schedule a meeting for next week?</div>
+                        <div class="message-time">3 hours ago</div>
+                        <div class="unread-indicator">1</div>
+                    </div>
+                </div>
+                
+                <!-- Backend: Add more chat items here based on database records -->
+            </div>
+        </div>
+
+        <!-- Right Side - Chat Window -->
+        <div class="chat-window-container">
+            <div class="chat-window" id="chat-window">
+                <div class="chat-header" id="chat-header">
+                    <div class="selected-student-info">
+                        <div class="student-avatar-large">JS</div>
+                        <div class="student-details">
+                            <div class="student-name-large">John Smith</div>
+                            <div class="student-email">john.smith@student.edu</div>
+                            <div class="student-status">● Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="action-btn" title="Mark as Resolved">✓</button>
+                        <button class="action-btn" title="Archive Chat">📁</button>
+                        <!-- Backend: Add functionality for these actions -->
+                    </div>
+                </div>
+
+                <div class="messages" id="messages">
+                    <!-- Backend: Load message history from database for selected student -->
+                    <div class="message student">
+                        <div class="message-content">
+                            <span class="text">Hi, I need help with my project submission. The deadline is tomorrow and I'm having trouble uploading my files.</span>
+                            <span class="time">Today, 2:30 PM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message rep">
+                        <div class="message-content">
+                            <span class="text">Hi John! I'd be happy to help you with the submission. What specific error are you encountering when trying to upload?</span>
+                            <span class="time">Today, 2:35 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="message student">
+                        <div class="message-content">
+                            <span class="text">It keeps saying "file size too large" but my project is only 15MB.</span>
+                            <span class="time">Today, 2:40 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="chat-form" id="chat-form">
+                    <input type="hidden" id="selected-student-id" value="1">
+                    <!-- Backend: Update this value when selecting different students -->
+                    <input
+                        id="chat-input"
+                        type="text"
+                        placeholder="Type your response..."
+                        autocomplete="off"
+                        required
+                    />
+                    <button type="submit">Send</button>
+                    <!-- Backend: Handle form submission to save message and notify student -->
+                </form>
+            </div>
+
+            <!-- Default state when no chat is selected -->
+            <div class="no-chat-selected" id="no-chat-selected" style="display: none;">
+                <div class="no-chat-message">
+                    <h3>Select a conversation</h3>
+                    <p>Choose a student from the list to view and respond to their messages.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Frontend JavaScript for chat functionality
+        let currentStudentId = 1;
+
+        function selectChat(studentId) {
+            // Remove active class from all chat items
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to selected chat
+            document.querySelector(`[data-student-id="${studentId}"]`).classList.add('active');
+            
+            // Update current student ID
+            currentStudentId = studentId;
+            document.getElementById('selected-student-id').value = studentId;
+            
+            // Backend TODO: 
+            // 1. Load chat history for selected student from database
+            // 2. Update chat header with student information
+            // 3. Mark messages as read
+            // 4. Update unread count
+            
+            loadChatHistory(studentId);
+        }
+
+        function loadChatHistory(studentId) {
+            // Backend TODO: Replace with actual database call
+            // This is just a placeholder for demonstration
+            console.log('Loading chat history for student:', studentId);
+            
+            // Show chat window, hide no-chat-selected
+            document.getElementById('chat-window').style.display = 'flex';
+            document.getElementById('no-chat-selected').style.display = 'none';
+        }
+
+        function refreshChats() {
+            // Backend TODO: 
+            // 1. Fetch latest messages from database
+            // 2. Update chat list with new messages
+            // 3. Update unread counts
+            // 4. Refresh current chat if one is selected
+            console.log('Refreshing chats...');
+        }
+
+        // Handle form submission
+        document.getElementById('chat-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            const studentId = document.getElementById('selected-student-id').value;
+            
+            if (message && studentId) {
+                // Add message to chat (temporary - replace with backend call)
+                addMessage(message, 'rep');
+                input.value = '';
+                
+                // Backend TODO: 
+                // 1. Save message to database
+                // 2. Send notification to student
+                // 3. Update chat list with latest message
+                // 4. Update message timestamps
+            }
+        });
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <span class="text">${text}</span>
+                    <span class="time">Today, ${time}</span>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load the first chat by default
+            selectChat(1);
+        });
+    </script>
+</body>
+</html>
