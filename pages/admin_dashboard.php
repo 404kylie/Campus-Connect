@@ -30,40 +30,93 @@ function get_all_users_for_admin()
     return array_merge($students, $officers);
 }
 
-function add_student_as_admin($name, $email, $hashed_password, $department)
+function add_student_as_admin($studentID, $name, $email, $hashed_password, $department)
 {
     global $conn;
-    $sql = "INSERT INTO student (name, email, password, department) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO student (studentID, name, email, password, department) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $name, $email, $hashed_password, $department);
+    $stmt->bind_param("sssss", $studentID, $name, $email, $hashed_password, $department);
     return $stmt->execute();
 }
 
-function add_officer_as_admin($name, $email, $hashed_password, $department, $isRepresentative)
+function add_officer_as_admin($officerID, $name, $email, $hashed_password, $department, $isRepresentative)
 {
     global $conn;
-    $sql = "INSERT INTO officer (name, email, password, department, isRepresentative) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO officer (officerID, name, email, password, department, isRepresentative) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssi", $name, $email, $hashed_password, $department, $isRepresentative);
+    $stmt->bind_param("sssssi", $officerID, $name, $email, $hashed_password, $department, $isRepresentative);
     return $stmt->execute();
 }
 
-function update_user_as_admin($id, $name, $email, $role, $department, $status_or_representative)
+function update_user_as_admin($id, $name, $email, $new_role, $department, $status_or_representative, $old_role)
 {
     global $conn;
 
-    if ($role == 'student') {
-        $sql = "UPDATE student SET name = ?, email = ?, department = ? WHERE studentID = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssi", $name, $email, $department, $id);
-    } else if ($role == 'officer') {
-        $isRepresentative = ($status_or_representative == 'Representative') ? 1 : 0;
-        $sql = "UPDATE officer SET name = ?, email = ?, department = ?, isRepresentative = ? WHERE officerID = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssii", $name, $email, $department, $isRepresentative, $id);
+    // If role hasn't changed, just update the existing record
+    if ($new_role == $old_role) {
+        if ($new_role == 'student') {
+            $sql = "UPDATE student SET name = ?, email = ?, department = ? WHERE studentID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $name, $email, $department, $id);
+        } else if ($new_role == 'officer') {
+            $isRepresentative = ($status_or_representative == 'Representative') ? 1 : 0;
+            $sql = "UPDATE officer SET name = ?, email = ?, department = ?, isRepresentative = ? WHERE officerID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssis", $name, $email, $department, $isRepresentative, $id);
+        }
+        return $stmt->execute();
     }
 
-    return $stmt->execute();
+    // Role has changed - need to move the record between tables
+    $conn->begin_transaction();
+
+    try {
+        // Get the current password from the old table
+        if ($old_role == 'student') {
+            $password_sql = "SELECT password FROM student WHERE studentID = ?";
+        } else {
+            $password_sql = "SELECT password FROM officer WHERE officerID = ?";
+        }
+
+        $password_stmt = $conn->prepare($password_sql);
+        $password_stmt->bind_param("s", $id);
+        $password_stmt->execute();
+        $password_result = $password_stmt->get_result();
+        $password_data = $password_result->fetch_assoc();
+        $password = $password_data['password'];
+
+        // Delete from old table
+        if ($old_role == 'student') {
+            $delete_sql = "DELETE FROM student WHERE studentID = ?";
+        } else {
+            $delete_sql = "DELETE FROM officer WHERE officerID = ?";
+        }
+
+        $delete_stmt = $conn->prepare($delete_sql);
+        $delete_stmt->bind_param("s", $id);
+        $delete_stmt->execute();
+
+        // Insert into new table
+        if ($new_role == 'student') {
+            $insert_sql = "INSERT INTO student (studentID, name, email, password, department) VALUES (?, ?, ?, ?, ?)";
+            $insert_stmt = $conn->prepare($insert_sql);
+            $insert_stmt->bind_param("sssss", $id, $name, $email, $password, $department);
+        } else if ($new_role == 'officer') {
+            $isRepresentative = ($status_or_representative == 'Representative') ? 1 : 0;
+            $insert_sql = "INSERT INTO officer (officerID, name, email, password, department, isRepresentative) VALUES (?, ?, ?, ?, ?, ?)";
+            $insert_stmt = $conn->prepare($insert_sql);
+            $insert_stmt->bind_param("sssssi", $id, $name, $email, $password, $department, $isRepresentative);
+        }
+
+        $insert_stmt->execute();
+
+        $conn->commit();
+        return true;
+
+    } catch (Exception $e) {
+        $conn->rollback();
+        throw $e;
+    }
 }
 
 function delete_user_as_admin($id, $role)
@@ -77,7 +130,7 @@ function delete_user_as_admin($id, $role)
     }
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("s", $id); // Changed from "i" to "s" since IDs are now strings
     return $stmt->execute();
 }
 
@@ -87,25 +140,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id = $_POST['id'];
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
-        $role = $_POST['role'];
+        $new_role = $_POST['role'];
+        $old_role = $_POST['old_role']; // Get the original role
         $status = $_POST['status'];
         $department = trim($_POST['department']);
 
-        // Update user based on role
-        if ($role == 'student') {
-            update_user_as_admin($id, $name, $email, $role, $department, $status);
-        } else if ($role == 'officer') {
-            update_user_as_admin($id, $name, $email, $role, $department, $status);
+        try {
+            // Update user (handles role changes automatically)
+            update_user_as_admin($id, $name, $email, $new_role, $department, $status, $old_role);
+            $_SESSION['success_message'] = "User updated successfully!";
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "Error updating user: " . $e->getMessage();
         }
 
-        $_SESSION['success_message'] = "User updated successfully!";
         header("Location: admin_dashboard.php");
         exit();
     }
 
     if (isset($_POST['delete_user'])) {
         $id = $_POST['id'];
-        $role = $_POST['role'];
+        $role = $_POST['old_role']; // Use old_role for deletion
 
         delete_user_as_admin($id, $role);
         $_SESSION['success_message'] = "User deleted successfully!";
@@ -114,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (isset($_POST['add_user'])) {
+        $userID = trim($_POST['user_id']); // New field for custom ID
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
         $password = $_POST['password'];
@@ -121,17 +176,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $department = trim($_POST['department']);
         $status = $_POST['status'];
 
+        // Validate that user ID is provided
+        if (empty($userID)) {
+            $_SESSION['error_message'] = "User ID is required!";
+            header("Location: admin_dashboard.php");
+            exit();
+        }
+
         // Hash password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        if ($role == 'student') {
-            add_student_as_admin($name, $email, $hashed_password, $department);
-        } else if ($role == 'officer') {
-            $isRepresentative = ($status == 'Representative') ? 1 : 0;
-            add_officer_as_admin($name, $email, $hashed_password, $department, $isRepresentative);
+        try {
+            if ($role == 'student') {
+                // Check if student ID already exists
+                $check_sql = "SELECT studentID FROM student WHERE studentID = ?";
+                $check_stmt = $conn->prepare($check_sql);
+                $check_stmt->bind_param("s", $userID);
+                $check_stmt->execute();
+                $result = $check_stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $_SESSION['error_message'] = "Student ID already exists!";
+                    header("Location: admin_dashboard.php");
+                    exit();
+                }
+
+                add_student_as_admin($userID, $name, $email, $hashed_password, $department);
+            } else if ($role == 'officer') {
+                // Check if officer ID already exists
+                $check_sql = "SELECT officerID FROM officer WHERE officerID = ?";
+                $check_stmt = $conn->prepare($check_sql);
+                $check_stmt->bind_param("s", $userID);
+                $check_stmt->execute();
+                $result = $check_stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $_SESSION['error_message'] = "Officer ID already exists!";
+                    header("Location: admin_dashboard.php");
+                    exit();
+                }
+
+                $isRepresentative = ($status == 'Representative') ? 1 : 0;
+                add_officer_as_admin($userID, $name, $email, $hashed_password, $department, $isRepresentative);
+            }
+
+            $_SESSION['success_message'] = "User added successfully!";
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "Error adding user: " . $e->getMessage();
         }
 
-        $_SESSION['success_message'] = "User added successfully!";
         header("Location: admin_dashboard.php");
         exit();
     }
@@ -165,6 +258,16 @@ $all_users = get_all_users_for_admin();
             </div>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="error-message"
+                style="background-color: #ffe6e6; border: 1px solid #ff9999; padding: 10px; margin-bottom: 15px; border-radius: 5px; color: #cc0000;">
+                <?php
+                echo htmlspecialchars($_SESSION['error_message']);
+                unset($_SESSION['error_message']);
+                ?>
+            </div>
+        <?php endif; ?>
+
         <form action="../logout.php" method="POST" class="logout-form">
             <button type="submit" class="logout-btn">Logout</button>
         </form>
@@ -175,6 +278,11 @@ $all_users = get_all_users_for_admin();
         <div class="add-user-form">
             <form method="POST">
                 <div class="form-grid">
+                    <div class="form-group">
+                        <label for="user_id">User ID:</label>
+                        <input type="text" id="user_id" name="user_id" placeholder="Enter Student ID or Officer ID"
+                            required>
+                    </div>
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" required>
@@ -189,7 +297,7 @@ $all_users = get_all_users_for_admin();
                     </div>
                     <div class="form-group">
                         <label for="role">Role:</label>
-                        <select id="role" name="role" required onchange="toggleStatusOptions()">
+                        <select id="role" name="role" required onchange="toggleStatusOptionsForAdd()">
                             <option value="">Select Role</option>
                             <option value="student">Student</option>
                             <option value="officer">Officer</option>
@@ -197,14 +305,24 @@ $all_users = get_all_users_for_admin();
                     </div>
                     <div class="form-group">
                         <label for="department">Department:</label>
-                        <input type="text" id="department" name="department" required>
+                        <select id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Electronics and Communication">Electronics and Communication</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Other">Other</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="status">Status:</label>
                         <select id="status" name="status" required>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
-                            <option value="Representative" id="rep-option" class="rep-option">Representative</option>
+                            <option value="Representative" id="rep-option" class="rep-option" style="display: none;">
+                                Representative</option>
                         </select>
                     </div>
                 </div>
@@ -272,7 +390,7 @@ $all_users = get_all_users_for_admin();
 
                                 <td data-label="Actions">
                                     <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-                                    <input type="hidden" name="role" value="<?php echo $user['role']; ?>">
+                                    <input type="hidden" name="old_role" value="<?php echo $user['role']; ?>">
                                     <div class="action-buttons">
                                         <button type="submit" name="edit_user" class="action-btn btn-primary">Save</button>
                                         <button type="submit" name="delete_user" class="action-btn btn-danger"
@@ -288,19 +406,25 @@ $all_users = get_all_users_for_admin();
     </div>
 
     <script>
-        function toggleStatusOptions() {
+        function toggleStatusOptionsForAdd() {
             const roleSelect = document.getElementById('role');
             const statusSelect = document.getElementById('status');
             const repOption = document.getElementById('rep-option');
+            const userIdField = document.getElementById('user_id');
 
             if (roleSelect.value === 'officer') {
                 repOption.style.display = 'block';
-            } else {
+                userIdField.placeholder = 'Enter Officer ID';
+            } else if (roleSelect.value === 'student') {
                 repOption.style.display = 'none';
+                userIdField.placeholder = 'Enter Student ID';
                 // Reset to active if Representative was selected
                 if (statusSelect.value === 'Representative') {
                     statusSelect.value = 'active';
                 }
+            } else {
+                repOption.style.display = 'none';
+                userIdField.placeholder = 'Enter Student ID or Officer ID';
             }
         }
 
@@ -326,6 +450,11 @@ $all_users = get_all_users_for_admin();
                 }
             }
         }
+
+        // Initialize the form on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            toggleStatusOptionsForAdd();
+        });
     </script>
 </body>
 

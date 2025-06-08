@@ -57,7 +57,7 @@ unset($_SESSION['signup_errors']);
                 <input type="text" name="student_id" id="id-field" placeholder="Student ID"
                     value="<?php echo htmlspecialchars($form_data['student_id'] ?? ''); ?>" required />
 
-                <select name="department" id="department-field">
+                <select name="department" id="department-field" onchange="toggleDepartmentField()">
                     <option value="Computer Science" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Computer Science') ? 'selected' : ''; ?>>Computer Science</option>
                     <option value="Information Technology" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Information Technology') ? 'selected' : ''; ?>>Information
                         Technology</option>
@@ -70,6 +70,11 @@ unset($_SESSION['signup_errors']);
                         Engineering</option>
                     <option value="Other" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Other') ? 'selected' : ''; ?>>Other</option>
                 </select>
+
+                <input type="text" name="other_department" id="other-department-field"
+                    placeholder="Please specify your department"
+                    value="<?php echo htmlspecialchars($form_data['other_department'] ?? ''); ?>"
+                    style="display: none;" />
 
                 <input type="password" name="password" placeholder="Password" required />
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required />
@@ -101,9 +106,24 @@ unset($_SESSION['signup_errors']);
             }
         }
 
+        function toggleDepartmentField() {
+            const departmentSelect = document.getElementById('department-field');
+            const otherDepartmentField = document.getElementById('other-department-field');
+
+            if (departmentSelect.value === 'Other') {
+                otherDepartmentField.style.display = 'block';
+                otherDepartmentField.required = true;
+            } else {
+                otherDepartmentField.style.display = 'none';
+                otherDepartmentField.required = false;
+                otherDepartmentField.value = ''; // Clear the field when hidden
+            }
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             toggleFields();
+            toggleDepartmentField(); // Also initialize department field visibility
         });
 
         // Form validation
@@ -120,6 +140,16 @@ unset($_SESSION['signup_errors']);
             if (password.length < 6) {
                 e.preventDefault();
                 alert('Password must be at least 6 characters long!');
+                return false;
+            }
+
+            // Validate other department field if "Other" is selected
+            const departmentSelect = document.getElementById('department-field');
+            const otherDepartmentField = document.getElementById('other-department-field');
+
+            if (departmentSelect.value === 'Other' && otherDepartmentField.value.trim() === '') {
+                e.preventDefault();
+                alert('Please specify your department!');
                 return false;
             }
         });

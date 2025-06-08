@@ -11,7 +11,7 @@ CREATE TABLE admin (
 
 -- Student Table
 CREATE TABLE student (
-  studentID INT AUTO_INCREMENT PRIMARY KEY,
+  studentID VARCHAR(50) PRIMARY KEY,  -- Changed from INT AUTO_INCREMENT to VARCHAR PRIMARY KEY
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE student (
 
 -- Officer Table
 CREATE TABLE officer (
-  officerID INT AUTO_INCREMENT PRIMARY KEY,
+  officerID VARCHAR(50) PRIMARY KEY,  -- Changed from INT AUTO_INCREMENT to VARCHAR PRIMARY KEY
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE officer (
 -- Announcement Table
 CREATE TABLE announcement (
   announcementID INT AUTO_INCREMENT PRIMARY KEY,
-  officerID INT NOT NULL,
+  officerID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
   date DATE NOT NULL,
   time TIME NOT NULL,
   subject VARCHAR(255) NOT NULL,
@@ -44,16 +44,20 @@ CREATE TABLE announcement (
 -- Chat Table
 CREATE TABLE chat (
   chatID INT AUTO_INCREMENT PRIMARY KEY,
-  officerID INT NOT NULL,
-  studentID INT NOT NULL,
+  officerID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
+  studentID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
   date DATE NOT NULL,
   time TIME NOT NULL,
   message TEXT NOT NULL,
+  sender_type ENUM('student', 'officer') NOT NULL DEFAULT 'student',
   FOREIGN KEY (officerID) REFERENCES officer(officerID)
     ON DELETE CASCADE,
   FOREIGN KEY (studentID) REFERENCES student(studentID)
     ON DELETE CASCADE
 );
 
--- Add sender_type column to the existing chat table
-ALTER TABLE chat ADD COLUMN sender_type ENUM('student', 'officer') NOT NULL DEFAULT 'student';
+-- If you need to update existing tables, use these ALTER statements:
+-- ALTER TABLE student DROP PRIMARY KEY, MODIFY studentID VARCHAR(50) PRIMARY KEY;
+-- ALTER TABLE officer DROP PRIMARY KEY, MODIFY officerID VARCHAR(50) PRIMARY KEY;
+-- ALTER TABLE announcement MODIFY officerID VARCHAR(50) NOT NULL;
+-- ALTER TABLE chat MODIFY officerID VARCHAR(50) NOT NULL, MODIFY studentID VARCHAR(50) NOT NULL;
