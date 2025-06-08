@@ -59,13 +59,10 @@ body {
     .announcement-box {
       background: #fff0e6;
       border-radius: 12px;
-      padding: 1rem;
+      padding: 1.5rem;
       margin-bottom: 1rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: flex-start;
+      border: 1px solid #f0d0b5;
     }
 
     .announcement-box textarea {
@@ -110,6 +107,130 @@ body {
       text-align: center;
     }
 
+    /* Beautiful Success and Error Messages */
+    .success-message {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      color: #155724;
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: none;
+      box-shadow: 0 4px 15px rgba(21, 87, 36, 0.15);
+      position: relative;
+      overflow: hidden;
+      font-weight: 600;
+      font-size: 1rem;
+      animation: slideInFromTop 0.5s ease-out;
+    }
+
+    .success-message::before {
+      content: "✓";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #28a745;
+      background: rgba(255, 255, 255, 0.8);
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    }
+
+    .success-message::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #28a745, #20c997, #17a2b8);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .error-message {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      color: #721c24;
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: none;
+      box-shadow: 0 4px 15px rgba(114, 28, 36, 0.15);
+      position: relative;
+      overflow: hidden;
+      font-weight: 600;
+      font-size: 1rem;
+      animation: slideInFromTop 0.5s ease-out;
+    }
+
+    .error-message::before {
+      content: "⚠";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #dc3545;
+      background: rgba(255, 255, 255, 0.8);
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    }
+
+    .error-message::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #dc3545, #e74c3c, #fd7e14);
+      border-radius: 12px 12px 0 0;
+    }
+
+    /* Add padding to account for the icon */
+    .success-message,
+    .error-message {
+      padding-left: 4rem;
+    }
+
+    /* Animation for messages */
+    @keyframes slideInFromTop {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Pulse animation for icons */
+    .success-message::before,
+    .error-message::before {
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: translateY(-50%) scale(1);
+      }
+      50% {
+        transform: translateY(-50%) scale(1.1);
+      }
+    }
+
     /* Added styles for buttons container */
     .btn-group {
       display: flex;
@@ -144,4 +265,187 @@ body {
       transform: scale(1.05);
       text-decoration: none;
       color: white;
+    }
+
+    /* Enhanced Announcement Header Styles */
+    .announcement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .announcement-subject {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #333;
+      flex: 1;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      line-height: 1.4;
+    }
+
+    .announcement-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0d0b5;
+    }
+
+    .announcement-content {
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      white-space: pre-wrap;
+    }
+
+    /* Improved Action Buttons */
+    .announcement-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      align-items: flex-start;
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .btn-edit {
+      background: linear-gradient(90deg, #28a745, #20c997);
+      color: white;
+      box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-edit:hover {
+      background: linear-gradient(90deg, #20c997, #28a745);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-delete {
+      background: linear-gradient(90deg, #dc3545, #e74c3c);
+      color: white;
+      box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-delete:hover {
+      background: linear-gradient(90deg, #e74c3c, #dc3545);
+      box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+      background: linear-gradient(90deg, #6c757d, #495057);
+      color: white;
+      box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-cancel:hover {
+      background: linear-gradient(90deg, #495057, #6c757d);
+      box-shadow: 0 4px 8px rgba(108, 117, 125, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Enhanced Edit Form */
+    .edit-form {
+      margin-top: 1rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .form-group input, 
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus, 
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #f76c2f;
+      box-shadow: 0 0 0 2px rgba(247, 108, 47, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .dashboard-container {
+        padding: 1.5rem;
+      }
+      
+      .announcement-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+      
+      .announcement-actions {
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+      }
+      
+      .btn-small {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 55px;
+      }
+      
+      .announcement-subject {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .announcement-actions {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      
+      .btn-small {
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .edit-form {
+        padding: 1rem;
+      }
     }

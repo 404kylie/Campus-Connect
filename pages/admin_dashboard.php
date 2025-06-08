@@ -272,65 +272,6 @@ $all_users = get_all_users_for_admin();
             <button type="submit" class="logout-btn">Logout</button>
         </form>
     </div>
-
-    <div class="dashboard-container">
-        <h2>Add New User</h2>
-        <div class="add-user-form">
-            <form method="POST">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="user_id">User ID:</label>
-                        <input type="text" id="user_id" name="user_id" placeholder="Enter Student ID or Officer ID"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role:</label>
-                        <select id="role" name="role" required onchange="toggleStatusOptionsForAdd()">
-                            <option value="">Select Role</option>
-                            <option value="student">Student</option>
-                            <option value="officer">Officer</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Department:</label>
-                        <select id="department" name="department" required>
-                            <option value="">Select Department</option>
-                            <option value="Computer Science">Computer Science</option>
-                            <option value="Information Technology">Information Technology</option>
-                            <option value="Electronics and Communication">Electronics and Communication</option>
-                            <option value="Mechanical Engineering">Mechanical Engineering</option>
-                            <option value="Civil Engineering">Civil Engineering</option>
-                            <option value="Electrical Engineering">Electrical Engineering</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status:</label>
-                        <select id="status" name="status" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                            <option value="Representative" id="rep-option" class="rep-option" style="display: none;">
-                                Representative</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" name="add_user" class="btn-primary">Add User</button>
-            </form>
-        </div>
-    </div>
-
     <div class="dashboard-container">
         <h2>User Management</h2>
         <div class="table-responsive">
