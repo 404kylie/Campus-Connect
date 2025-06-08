@@ -242,6 +242,130 @@ $all_users = get_all_users_for_admin();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - CampusConnect</title>
     <link rel="stylesheet" href="../assets/css/admin_dashboard.css">
+    <style>
+        /* Search bar styles */
+        .user-management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            padding-right: 3rem;
+            font-size: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            background: var(--white);
+            color: var(--text);
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(247, 108, 47, 0.1);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(247, 108, 47, 0.1), 0 4px 12px rgba(247, 108, 47, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus+.search-icon {
+            color: var(--secondary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Highlight styles */
+        mark {
+            background: linear-gradient(90deg, var(--secondary), #fff3e6);
+            color: var(--primary);
+            padding: 0.1rem 0.2rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-style: italic;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .no-results p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive search */
+        @media (max-width: 768px) {
+            .user-management-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%;
+                min-width: auto;
+            }
+
+            .search-input {
+                font-size: 0.9rem;
+                padding: 0.65rem 0.9rem;
+                padding-right: 2.8rem;
+            }
+
+            .search-icon {
+                right: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-input {
+                padding: 0.6rem 0.8rem;
+                padding-right: 2.5rem;
+                font-size: 0.85rem;
+            }
+
+            .search-icon {
+                right: 0.8rem;
+            }
+
+            .search-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -273,7 +397,19 @@ $all_users = get_all_users_for_admin();
         </form>
     </div>
     <div class="dashboard-container">
-        <h2>User Management</h2>
+        <div class="user-management-header">
+            <h2>User Management</h2>
+            <div class="search-container">
+                <input type="text" id="userSearch" placeholder="Search users by name..." class="search-input">
+                <div class="search-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="21 21l-4.35-4.35"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -287,13 +423,13 @@ $all_users = get_all_users_for_admin();
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="userTableBody">
                     <?php foreach ($all_users as $user): ?>
-                        <tr>
+                        <tr class="user-row">
                             <form method="POST" onsubmit="return confirm('Are you sure you want to save these changes?');">
                                 <td data-label="ID"><?php echo htmlspecialchars($user['id']); ?></td>
 
-                                <td data-label="Name">
+                                <td data-label="Name" class="user-name">
                                     <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>"
                                         required class="table-input">
                                 </td>
@@ -344,6 +480,9 @@ $all_users = get_all_users_for_admin();
                 </tbody>
             </table>
         </div>
+        <div id="noResults" class="no-results" style="display: none;">
+            <p>No users found matching your search.</p>
+        </div>
     </div>
 
     <script>
@@ -353,19 +492,21 @@ $all_users = get_all_users_for_admin();
             const repOption = document.getElementById('rep-option');
             const userIdField = document.getElementById('user_id');
 
-            if (roleSelect.value === 'officer') {
-                repOption.style.display = 'block';
-                userIdField.placeholder = 'Enter Officer ID';
-            } else if (roleSelect.value === 'student') {
-                repOption.style.display = 'none';
-                userIdField.placeholder = 'Enter Student ID';
-                // Reset to active if Representative was selected
-                if (statusSelect.value === 'Representative') {
-                    statusSelect.value = 'active';
+            if (roleSelect && statusSelect && userIdField) {
+                if (roleSelect.value === 'officer') {
+                    if (repOption) repOption.style.display = 'block';
+                    userIdField.placeholder = 'Enter Officer ID';
+                } else if (roleSelect.value === 'student') {
+                    if (repOption) repOption.style.display = 'none';
+                    userIdField.placeholder = 'Enter Student ID';
+                    // Reset to active if Representative was selected
+                    if (statusSelect.value === 'Representative') {
+                        statusSelect.value = 'active';
+                    }
+                } else {
+                    if (repOption) repOption.style.display = 'none';
+                    userIdField.placeholder = 'Enter Student ID or Officer ID';
                 }
-            } else {
-                repOption.style.display = 'none';
-                userIdField.placeholder = 'Enter Student ID or Officer ID';
             }
         }
 
@@ -392,9 +533,69 @@ $all_users = get_all_users_for_admin();
             }
         }
 
+        // Search functionality
+        function searchUsers() {
+            const searchInput = document.getElementById('userSearch');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const userRows = document.querySelectorAll('.user-row');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            userRows.forEach(row => {
+                const nameInput = row.querySelector('.user-name input');
+                const userName = nameInput.value.toLowerCase();
+
+                if (userName.includes(searchTerm)) {
+                    row.style.display = '';
+                    visibleCount++;
+
+                    // Highlight matching text
+                    if (searchTerm !== '') {
+                        const highlightedName = nameInput.value.replace(
+                            new RegExp(`(${searchTerm})`, 'gi'),
+                            '<mark>$1</mark>'
+                        );
+                        // Store original value
+                        if (!nameInput.dataset.originalValue) {
+                            nameInput.dataset.originalValue = nameInput.value;
+                        }
+                    } else {
+                        // Restore original value when search is cleared
+                        if (nameInput.dataset.originalValue) {
+                            nameInput.value = nameInput.dataset.originalValue;
+                        }
+                    }
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show/hide no results message
+            if (visibleCount === 0 && searchTerm !== '') {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
         // Initialize the form on page load
         document.addEventListener('DOMContentLoaded', function () {
             toggleStatusOptionsForAdd();
+
+            // Add search event listener
+            const searchInput = document.getElementById('userSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', searchUsers);
+
+                // Clear search on escape key
+                searchInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        this.value = '';
+                        searchUsers();
+                        this.blur();
+                    }
+                });
+            }
         });
     </script>
 </body>
