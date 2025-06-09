@@ -58,16 +58,20 @@ unset($_SESSION['signup_errors']);
                     value="<?php echo htmlspecialchars($form_data['student_id'] ?? ''); ?>" required />
 
                 <select name="department" id="department-field" onchange="toggleDepartmentField()">
-                    <option value="Computer Science" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Computer Science') ? 'selected' : ''; ?>>Computer Science</option>
-                    <option value="Information Technology" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Information Technology') ? 'selected' : ''; ?>>Information
-                        Technology</option>
-                    <option value="Electronics and Communication" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Electronics and Communication') ? 'selected' : ''; ?>>Electronics
-                        and Communication</option>
-                    <option value="Mechanical Engineering" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Mechanical Engineering') ? 'selected' : ''; ?>>Mechanical
+                    <option value="Bachelor of Science in Information Technology" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Bachelor of Science in Information Technology') ? 'selected' : ''; ?>>Bachelor of Science in Information Technology
+                    </option>
+                    <option value="College of Arts and Sciences" <?php echo (isset($form_data['department']) && $form_data['department'] === 'College of Arts and Sciences') ? 'selected' : ''; ?>>College of Arts
+                        and Sciences</option>
+                    <option value="College of Education" <?php echo (isset($form_data['department']) && $form_data['department'] === 'College of Education') ? 'selected' : ''; ?>>College of Education
+                    </option>
+                    <option value="Bachelor of Industrial Technology" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Bachelor of Industrial Technology') ? 'selected' : ''; ?>>Bachelor
+                        of Industrial Technology</option>
+                    <option value="College of Engineering" <?php echo (isset($form_data['department']) && $form_data['department'] === 'College of Engineering') ? 'selected' : ''; ?>>College of
                         Engineering</option>
-                    <option value="Civil Engineering" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Civil Engineering') ? 'selected' : ''; ?>>Civil Engineering</option>
-                    <option value="Electrical Engineering" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Electrical Engineering') ? 'selected' : ''; ?>>Electrical
-                        Engineering</option>
+                    <option value="College of Agriculture" <?php echo (isset($form_data['department']) && $form_data['department'] === 'College of Agriculture') ? 'selected' : ''; ?>>College of
+                        Agriculture</option>
+                    <option value="Hospitality Management" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Hospitality Management') ? 'selected' : ''; ?>>Hospitality
+                        Management</option>
                     <option value="Other" <?php echo (isset($form_data['department']) && $form_data['department'] === 'Other') ? 'selected' : ''; ?>>Other</option>
                 </select>
 
