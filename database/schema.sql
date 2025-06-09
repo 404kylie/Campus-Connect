@@ -1,4 +1,3 @@
--- Create database (optional)
 CREATE DATABASE IF NOT EXISTS campusconnectdb;
 USE campusconnectdb;
 
@@ -11,7 +10,7 @@ CREATE TABLE admin (
 
 -- Student Table
 CREATE TABLE student (
-  studentID VARCHAR(50) PRIMARY KEY,  -- Changed from INT AUTO_INCREMENT to VARCHAR PRIMARY KEY
+  studentID VARCHAR(50) PRIMARY KEY,  
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -20,7 +19,7 @@ CREATE TABLE student (
 
 -- Officer Table
 CREATE TABLE officer (
-  officerID VARCHAR(50) PRIMARY KEY,  -- Changed from INT AUTO_INCREMENT to VARCHAR PRIMARY KEY
+  officerID VARCHAR(50) PRIMARY KEY,  
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -31,7 +30,7 @@ CREATE TABLE officer (
 -- Announcement Table
 CREATE TABLE announcement (
   announcementID INT AUTO_INCREMENT PRIMARY KEY,
-  officerID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
+  officerID VARCHAR(50) NOT NULL,  
   date DATE NOT NULL,
   time TIME NOT NULL,
   subject VARCHAR(255) NOT NULL,
@@ -44,8 +43,8 @@ CREATE TABLE announcement (
 -- Chat Table
 CREATE TABLE chat (
   chatID INT AUTO_INCREMENT PRIMARY KEY,
-  officerID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
-  studentID VARCHAR(50) NOT NULL,  -- Changed from INT to VARCHAR
+  officerID VARCHAR(50) NOT NULL,  
+  studentID VARCHAR(50) NOT NULL,  
   date DATE NOT NULL,
   time TIME NOT NULL,
   message TEXT NOT NULL,
@@ -56,8 +55,3 @@ CREATE TABLE chat (
     ON DELETE CASCADE
 );
 
--- If you need to update existing tables, use these ALTER statements:
--- ALTER TABLE student DROP PRIMARY KEY, MODIFY studentID VARCHAR(50) PRIMARY KEY;
--- ALTER TABLE officer DROP PRIMARY KEY, MODIFY officerID VARCHAR(50) PRIMARY KEY;
--- ALTER TABLE announcement MODIFY officerID VARCHAR(50) NOT NULL;
--- ALTER TABLE chat MODIFY officerID VARCHAR(50) NOT NULL, MODIFY studentID VARCHAR(50) NOT NULL;
